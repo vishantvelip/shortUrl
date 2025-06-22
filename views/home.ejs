@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>URL Shortener</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin: 10px 0;
+    }
+    button {
+      padding: 8px 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .delete-btn {
+      background-color: #dc3545;
+      margin-left: 10px;
+    }
+    .delete-btn:hover {
+      background-color: #c82333;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin: 10px 0;
+    }
+    .copy-btn {
+      margin-left: 10px;
+      padding: 5px 10px;
+      font-size: 14px;
+    }
+    .error {
+      color: red;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>URL Shortener</h1>
+  <div>
+    <form method="post" action="/url">
+      <label>Enter your URL</label>
+      <input type="text" name="url" placeholder="https://example.com" />
+      <button type="submit">Generate</button>
+    </form>
+  </div>
+  <% if (error) { %>
+    <p class="error"><%= error %></p>
+  <% } %>
+  <% if (locals.id && id !== '') { %>
+    <p>
+      Short URL: <span id="short-url">http://localhost:8000/url/<%= id %></span>
+      <button class="copy-btn" onclick="copyToClipboard()">Copy</button>
+    </p>
+  <% } %>
+  <div>
+    <% if (urls && urls.length > 0) { %>
+      <h2>Shortened URLs</h2>
+      <ul>
+        <% urls.forEach(url => { %>
+          <li>
+            <a href="/url/<%= url.shortId %>">http://localhost:8000/url/<%= url.shortId %></a> 
+            (Redirects to: <a href="<%= url.redirectURL %>"><%= url.redirectURL %></a>)
+            - Clicks: <%= url.visitHistory.length %>
+            - <form action="/url/<%= url.shortId %>/delete" method="post" style="display:inline;">
+                <button type="submit" class="delete-btn">Delete</button>
+              </form>
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </div>
+
+  <script>
+    function copyToClipboard() {
+      const url = document.getElementById('short-url').textContent;
+      navigator.clipboard.writeText(url).then(() => {
+        alert('URL copied to clipboard!');
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+        alert('Failed to copy URL.');
+      });
+    }
+  </script>
+</body>
+</html>
