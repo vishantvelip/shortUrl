@@ -66,7 +66,7 @@
   <% } %>
   <% if (locals.id && id !== '') { %>
     <p>
-      Short URL: <span id="short-url">https://shorturl-hfxr.onrender.com//url/<%= id %></span>
+      Short URL: <span id="short-url">url/<%= id %></span>
       <button class="copy-btn" onclick="copyToClipboard()">Copy</button>
     </p>
   <% } %>
@@ -76,7 +76,7 @@
       <ul>
         <% urls.forEach(url => { %>
           <li>
-            <a href="/url/<%= url.shortId %>">http://localhost:8000/url/<%= url.shortId %></a> 
+            <a href="/url/<%= url.shortId %>">https://shorturl-hfxr.onrender.com/url/<%= url.shortId %></a> 
             (Redirects to: <a href="<%= url.redirectURL %>"><%= url.redirectURL %></a>)
             - Clicks: <%= url.visitHistory.length %>
             - <form action="/url/<%= url.shortId %>/delete" method="post" style="display:inline;">
